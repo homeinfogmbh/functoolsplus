@@ -16,10 +16,12 @@ def limit_executions(limit=1):
 
     def decorator(function):
         """Wraps the respective function."""
+        executions = 0
+
         @wraps(function)
         def wrapper(*args, **kwargs):
             "Wraps the respective function."""
-            executions = 0
+            nonlocal executions
 
             if executions < limit:
                 executions += 1
