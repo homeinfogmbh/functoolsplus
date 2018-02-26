@@ -1,0 +1,62 @@
+"""Miscellaneous system library."""
+
+from datetime import datetime
+from functools import wraps
+from itertools import chain
+
+__all__ = [
+    'limit_executions',
+    'once',
+    'callbackpartial',
+    'datetimenow']
+
+
+def limit_executions(limit=1):
+    """Limits the execution of a function."""
+
+    def decorator(function):
+        """Wraps the respective function."""
+        @wraps(function)
+        def wrapper(*args, **kwargs):
+            "Wraps the respective function."""
+            executions = 0
+
+            if executions < limit:
+                executions += 1
+                return function(*args, **kwargs)
+
+            return None
+
+        return wrapper
+
+    return decorator
+
+
+once = limit_executions(limit=1)
+
+
+def callbackpartial(function, *callbacks, **kwcallbacks):
+    """Returns a partial functions with arguments replaced by callbacks."""
+
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        """Wraps the respective function."""
+        keywords = {name: callback() for name, callback in kwcallbacks.items()}
+        keywords.update(kwargs)
+        arguments = chain((callback() for callback in callbacks), args)
+        return function(*arguments, **keywords)
+
+    return wrapper
+
+
+def datetimenow(function):
+    """Passes datetime.now() as first
+    argument to the respective function.
+    """
+
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        """Wrapts the respective function."""
+        return function(datetime.now(), *args, **kwargs)
+
+    return wrapper
