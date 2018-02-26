@@ -58,9 +58,4 @@ def datetimenow(function):
     argument to the respective function.
     """
 
-    @wraps(function)
-    def wrapper(*args, **kwargs):
-        """Wrapts the respective function."""
-        return function(datetime.now(), *args, **kwargs)
-
-    return wrapper
+    return callbackpartial(function, datetime.now)
