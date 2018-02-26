@@ -1,2 +1,2 @@
-# syslib
-A system library.
+# functoolsplus
+Extensions of the `functools` library.
