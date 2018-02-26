@@ -36,7 +36,9 @@ once = limit_executions(limit=1)
 
 
 def callbackpartial(function, *callbacks, **kwcallbacks):
-    """Returns a partial functions with arguments replaced by callbacks."""
+    """Returns a partial function with arguments
+    extended by the results of the given callbacks.
+    """
 
     @wraps(function)
     def wrapper(*args, **kwargs):
