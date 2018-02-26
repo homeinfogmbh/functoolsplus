@@ -1,4 +1,4 @@
-"""Miscellaneous system library."""
+"""Even higher-order functions and operations on callable objects."""
 
 from datetime import datetime
 from functools import wraps
