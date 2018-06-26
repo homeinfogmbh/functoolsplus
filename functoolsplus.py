@@ -8,7 +8,8 @@ __all__ = [
     'limit_executions',
     'once',
     'callbackpartial',
-    'datetimenow']
+    'datetimenow',
+    'returning']
 
 
 def limit_executions(limit=1):
@@ -59,3 +60,19 @@ def datetimenow(function):
     """
 
     return callbackpartial(function, datetime.now)
+
+
+def returning(type_):
+    """Converts the return value into the given type."""
+
+    def decorator(function):
+        """Decorates the given function."""
+
+        @wraps(function)
+        def wrapper(*args, **kwargs):
+            """Wraps the respective function."""
+            return type_(function(*args, **kwargs))
+
+        return wrapper
+
+    return decorator
