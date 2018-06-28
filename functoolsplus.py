@@ -10,7 +10,9 @@ __all__ = [
     'once',
     'callbackpartial',
     'datetimenow',
-    'returning']
+    'returning',
+    'wants_instance',
+    'typecheck']
 
 
 Mismatch = namedtuple('Mismatch', ('arg', 'value', 'type', 'expected'))
