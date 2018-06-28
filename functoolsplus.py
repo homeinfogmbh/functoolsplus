@@ -3,6 +3,7 @@
 from collections import namedtuple
 from datetime import datetime
 from functools import wraps
+from inspect import signature
 from itertools import chain
 
 __all__ = [
@@ -86,6 +87,15 @@ def returning(type_):
         return wrapper
 
     return decorator
+
+
+def wants_instance(function):
+    """Determines whether the respective function is considered a method."""
+
+    for arg in signature(function).parameters.keys():
+        return arg == 'self'    # Only check first argument.
+
+    return False
 
 
 def typecheck(*types, **kwtypes):
