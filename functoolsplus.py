@@ -12,7 +12,8 @@ __all__ = [
     'datetimenow',
     'returning',
     'wants_instance',
-    'typecheck']
+    'typecheck',
+    'with_class']
 
 
 Mismatch = namedtuple('Mismatch', ('arg', 'value', 'type', 'expected'))
@@ -137,3 +138,16 @@ def typecheck(*types, **kwtypes):
         return wrapper
 
     return decorator
+
+
+def with_class(function):
+    """Adds the instance's class as second
+    parameter to the wrapped function.
+    """
+
+    @wraps(function)
+    def wrapper(self, *args, **kwargs):
+        """Wraps the given function."""
+        return function(self, self.__class__, *args, **kwargs)
+
+    return wrapper
