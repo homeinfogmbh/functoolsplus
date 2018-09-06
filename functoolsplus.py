@@ -10,7 +10,7 @@ __all__ = [
     'once',
     'callbackpartial',
     'datetimenow',
-    'returning',
+    'coerce',
     'wants_instance',
     'typecheck',
     'with_class']
@@ -48,7 +48,7 @@ def limit_executions(limit=1):
     return decorator
 
 
-once = limit_executions(limit=1)
+once = limit_executions(limit=1)    # pylint: disable=C0103
 
 
 def callbackpartial(function, *callbacks, **kwcallbacks):
@@ -75,7 +75,7 @@ def datetimenow(function):
     return callbackpartial(function, datetime.now)
 
 
-def returning(type_):
+def coerce(type_):
     """Converts the return value into the given type."""
 
     def decorator(function):
