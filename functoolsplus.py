@@ -5,38 +5,10 @@ from functools import wraps
 from itertools import chain
 
 __all__ = [
-    'limit_executions',
-    'once',
     'callbackpartial',
     'datetimenow',
     'coerce',
     'wants_instance']
-
-
-def limit_executions(limit=1):
-    """Limits the execution of a function."""
-
-    def decorator(function):
-        """Wraps the respective function."""
-        executions = 0
-
-        @wraps(function)
-        def wrapper(*args, **kwargs):
-            "Wraps the respective function."""
-            nonlocal executions
-
-            if executions < limit:
-                executions += 1
-                return function(*args, **kwargs)
-
-            return None
-
-        return wrapper
-
-    return decorator
-
-
-once = limit_executions(limit=1)    # pylint: disable=C0103
 
 
 def callbackpartial(function, *callbacks, **kwcallbacks):
