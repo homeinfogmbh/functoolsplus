@@ -12,8 +12,7 @@ __all__ = [
     'datetimenow',
     'coerce',
     'wants_instance',
-    'typecheck',
-    'with_class']
+    'typecheck']
 
 
 Mismatch = namedtuple('Mismatch', ('arg', 'value', 'type', 'expected'))
@@ -54,12 +53,15 @@ once = limit_executions(limit=1)    # pylint: disable=C0103
 def callbackpartial(function, *callbacks, **kwcallbacks):
     """Returns a partial function with arguments
     extended by the results of the given callbacks.
+    Keyword arguments explicitely passed to the resulting
+    function may override keywords derived from callbacks.
     """
 
     @wraps(function)
     def wrapper(*args, **kwargs):
         """Wraps the respective function."""
         keywords = {name: callback() for name, callback in kwcallbacks.items()}
+        # Allow passed kwargs to override callback kwargs.
         keywords.update(kwargs)
         arguments = chain((callback() for callback in callbacks), args)
         return function(*arguments, **keywords)
@@ -138,16 +140,3 @@ def typecheck(*types, **kwtypes):
         return wrapper
 
     return decorator
-
-
-def with_class(function):
-    """Adds the instance's class as second
-    parameter to the wrapped function.
-    """
-
-    @wraps(function)
-    def wrapper(self, *args, **kwargs):
-        """Wraps the given function."""
-        return function(self, self.__class__, *args, **kwargs)
-
-    return wrapper
