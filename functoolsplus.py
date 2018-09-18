@@ -3,7 +3,32 @@
 from functools import wraps
 
 
-__all__ = ['coerce', 'wants_instance']
+__all__ = ['cached_method', 'coerce', 'wants_instance']
+
+
+def cached_method(attr='_cache'):
+    """Caches the return value of the
+    function within an instance attribute.
+    """
+
+    def decorator(method):
+        """Actual decorator."""
+
+        @wraps(method)
+        def wrapper(instance, *args, **kwargs):
+            """Wraps the respective method."""
+            cache = getattr(instance, attr)
+
+            try:
+                return cache[method]
+            except KeyError:
+                result = method(instance, *args, **kwargs)
+                cache[method] = result
+                return result
+
+        return wrapper
+
+    return decorator
 
 
 def coerce(type_):
