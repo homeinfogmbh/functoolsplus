@@ -6,7 +6,7 @@ from functools import wraps
 __all__ = ['cached_method', 'coerce', 'wants_instance']
 
 
-def cached_method(attr='_cache'):
+def cached_method(attr='cache'):
     """Caches the return value of the
     function within an instance attribute.
     """
