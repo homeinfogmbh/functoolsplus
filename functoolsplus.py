@@ -3,32 +3,7 @@
 from functools import wraps
 
 
-__all__ = ['cached_method', 'coerce', 'orderedfrozenset', 'wants_instance']
-
-
-def cached_method(attr='cache'):
-    """Caches the return value of the
-    function within an instance attribute.
-    """
-
-    def decorator(method):
-        """Actual decorator."""
-
-        @wraps(method)
-        def wrapper(instance, *args, **kwargs):
-            """Wraps the respective method."""
-            cache = getattr(instance, attr)
-
-            try:
-                return cache[method]
-            except KeyError:
-                result = method(instance, *args, **kwargs)
-                cache[method] = result
-                return result
-
-        return wrapper
-
-    return decorator
+__all__ = ['coerce', 'orderedfrozenset', 'wants_instance']
 
 
 def coerce(type_):
@@ -48,23 +23,19 @@ def coerce(type_):
     return decorator
 
 
+@coerce(tuple)
 def orderedfrozenset(items=None):
     """Creates a tuple with unique items."""
 
     if items is None:
-        return ()
+        return
 
     processed = set()
-    elements = []
 
     for item in items:
-        if item in processed:
-            continue
-
-        processed.add(item)
-        elements.append(item)
-
-    return tuple(elements)
+        if item not in processed:
+            processed.add(item)
+            yield item
 
 
 def wants_instance(function):
