@@ -3,7 +3,7 @@
 from functools import wraps
 
 
-__all__ = ['cached_method', 'coerce', 'wants_instance']
+__all__ = ['cached_method', 'coerce', 'orderedfrozenset', 'wants_instance']
 
 
 def cached_method(attr='cache'):
@@ -46,6 +46,25 @@ def coerce(type_):
         return wrapper
 
     return decorator
+
+
+def orderedfrozenset(items=None):
+    """Creates a tuple with unique items."""
+
+    if items is None:
+        return ()
+
+    processed = set()
+    elements = []
+
+    for item in items:
+        if item in processed:
+            continue
+
+        processed.add(item)
+        elements.append(item)
+
+    return tuple(elements)
 
 
 def wants_instance(function):
