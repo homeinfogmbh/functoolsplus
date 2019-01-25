@@ -40,7 +40,8 @@ def coerce(type_):
         @wraps(function)
         def wrapper(*args, **kwargs):
             """Wraps the respective function."""
-            return type_(function(*args, **kwargs))
+            result = function(*args, **kwargs)
+            return type_(result)
 
         return wrapper
 
