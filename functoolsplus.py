@@ -24,11 +24,8 @@ def coerce(type_):
 
 
 @coerce(tuple)
-def orderedfrozenset(items=None):
+def orderedfrozenset(items=()):
     """Creates a tuple with unique items."""
-
-    if items is None:
-        return
 
     processed = set()
 
