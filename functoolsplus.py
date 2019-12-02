@@ -38,9 +38,7 @@ def orderedfrozenset(items=()):
 def wants_instance(function):
     """Determines whether the respective function is considered a method."""
 
-    args = function.__code__.co_varnames[:function.__code__.co_argcount]
-
     try:
-        return args[0] == 'self'
+        return function.__code__.co_varnames[0] == 'self'
     except IndexError:
         return False
