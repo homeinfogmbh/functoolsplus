@@ -5,7 +5,7 @@ from sys import exit    # pylint: disable=W0622
 from typing import Callable, Iterable
 
 
-__all__ = ['coerce', 'orderedfrozenset', 'wants_instance']
+__all__ = ['coerce', 'exiting', 'orderedfrozenset', 'wants_instance']
 
 
 def coerce(typ: type) -> Callable:
