@@ -2,23 +2,10 @@
 
 from functools import wraps
 from sys import exit    # pylint: disable=W0622
-from typing import Callable, Iterable
+from typing import Callable
 
 
-__all__ = ['coerce', 'exiting', 'orderedfrozenset', 'wants_instance']
-
-
-class orderedfrozenset(frozenset):  # pylint: disable=C0103
-    """Creates a tuple with unique items."""
-
-    def __new__(cls, items: Iterable = ()):
-        ordered_items = tuple(items)
-        instance = super().__new__(cls, ordered_items)
-        instance._ordered_items = ordered_items
-        return instance
-
-    def __iter__(self):
-        yield from self._ordered_items  # pylint: disable=E1101
+__all__ = ['coerce', 'exiting', 'wants_instance']
 
 
 def coerce(typ: type) -> Callable:
