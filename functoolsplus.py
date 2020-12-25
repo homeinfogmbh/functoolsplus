@@ -1,8 +1,9 @@
 """Even higher-order functions and operations on callable objects."""
 
+from contextlib import suppress
 from functools import wraps
 from sys import exit    # pylint: disable=W0622
-from typing import Callable
+from typing import Any, Callable
 
 
 __all__ = ['coerce', 'exiting', 'wants_instance']
@@ -22,6 +23,28 @@ def coerce(typ: type) -> Callable:
         return wrapper
 
     return decorator
+
+
+def coroproperty(method: Callable) -> property:
+    """Single decorator for getter and setter methods."""
+
+    def getter(self) -> Any:
+        """Property setter function."""
+        coro = method(self)
+        value = next(coro)
+        coro.close()
+        return value
+
+    def setter(self, value: Any):
+        """Property getter function."""
+        coro = method(self)
+        next(coro)
+        next(coro)
+
+        with suppress(StopIteration):
+            coro.send(value)
+
+    return property(getter, setter)
 
 
 def exiting(function: Callable) -> Callable:
