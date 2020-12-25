@@ -57,14 +57,14 @@ def coroproperty(method: Callable) -> property:
     """
 
     def getter(self) -> Any:
-        """Property setter function."""
+        """Property getter function."""
         coro = method(self)
         value = next(coro)
         coro.close()
         return value
 
     def setter(self, value: Any):
-        """Property getter function."""
+        """Property setter function."""
         coro = method(self)
         next(coro)
         next(coro)
