@@ -26,7 +26,35 @@ def coerce(typ: type) -> Callable:
 
 
 def coroproperty(method: Callable) -> property:
-    """Single decorator for getter and setter methods."""
+    """Decorator for coroutine-based all-in-one getter and setter methods.
+
+    Usage:
+
+        class Circle:
+            '''Information about a circle.'''
+
+            def __init__(self, radius: float):
+                '''Initializes the circle with its radius.'''
+                self.radius = radius
+
+            @coroproperty
+            def diameter(self):
+                '''Gets and sets the diameter.'''
+                yield self.radius * 2
+                self.radius = (yield) / 2
+
+            @coroproperty
+            def circumference(self):
+                '''Gets and sets the circumference.'''
+                yield self.diameter * pi
+                self.diameter = (yield) / pi
+
+            @coroproperty
+            def area(self):
+                '''Gets and sets the area.'''
+                yield pow(self.radius, 2) * pi
+                self.radius = sqrt((yield) / pi)
+    """
 
     def getter(self) -> Any:
         """Property setter function."""
