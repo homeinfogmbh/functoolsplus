@@ -8,17 +8,30 @@ from typing import Callable, Iterable
 __all__ = ['coerce', 'exiting', 'orderedfrozenset', 'wants_instance']
 
 
+class orderedfrozenset(frozenset):  # pylint: disable=C0103
+    """Creates a tuple with unique items."""
+
+    def __new__(cls, items: Iterable = ()):
+        ordered_items = tuple(items)
+        instance = super().__new__(cls, ordered_items)
+        instance._ordered_items = ordered_items
+        return instance
+
+    def __iter__(self):
+        yield from self._ordered_items  # pylint: disable=E1101
+
+
 def coerce(typ: type) -> Callable:
     """Converts the return value into the given type."""
 
     def decorator(function: Callable) -> typ:
         """Decorates the given function."""
-
         @wraps(function)
         def wrapper(*args, **kwargs):
             """Wraps the respective function."""
             return typ(function(*args, **kwargs))
 
+        wrapper.__annotations__['return'] = typ
         return wrapper
 
     return decorator
@@ -31,25 +44,9 @@ def exiting(function: Callable) -> Callable:
     def wrapper(*args, **kwargs):
         """Wraps the respective function."""
         result = function(*args, **kwargs)
-
-        if result is None:
-            exit(0)
-
-        exit(result)
+        exit(result or 0)
 
     return wrapper
-
-
-@coerce(tuple)
-def orderedfrozenset(items: Iterable = ()):
-    """Creates a tuple with unique items."""
-
-    processed = set()
-
-    for item in items:
-        if item not in processed:
-            processed.add(item)
-            yield item
 
 
 def wants_instance(function: Callable) -> bool:
