@@ -88,7 +88,7 @@ def exiting(function: Callable) -> Callable:
     return wrapper
 
 
-def timeit(file: IO = stderr) -> Callable:
+def timeit(file: IO = stderr, flush: bool = False) -> Callable:
     """Times the execution of the given function."""
 
     def decorator(function: Callable) -> Callable:
@@ -100,7 +100,7 @@ def timeit(file: IO = stderr) -> Callable:
             result = function(*args, **kwargs)
             end = datetime.now()
             print('Function', function.__name__, 'took', end - start,
-                  file=file, flush=True)
+                  file=file, flush=flush)
             return result
 
         return wrapper
