@@ -1,12 +1,13 @@
 """Even higher-order functions and operations on callable objects."""
 
 from contextlib import suppress
+from datetime import datetime
 from functools import wraps
-from sys import exit    # pylint: disable=W0622
+from sys import exit, stderr    # pylint: disable=W0622
 from typing import Any, Callable
 
 
-__all__ = ['coerce', 'coroproperty', 'exiting', 'wants_instance']
+__all__ = ['coerce', 'coroproperty', 'exiting', 'timeit', 'wants_instance']
 
 
 def coerce(typ: type) -> Callable:
@@ -83,6 +84,21 @@ def exiting(function: Callable) -> Callable:
         """Wraps the respective function."""
         result = function(*args, **kwargs)
         exit(result or 0)
+
+    return wrapper
+
+
+def timeit(function: Callable) -> Callable:
+    """Times the execution of the given function."""
+
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        """Wraps the original function."""
+        start = datetime.now()
+        result = function(*args, **kwargs)
+        end = datetime.now()
+        print('Function', function.__name__, 'took', end - start, file=stderr)
+        return result
 
     return wrapper
 
