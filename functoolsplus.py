@@ -97,7 +97,8 @@ def timeit(function: Callable) -> Callable:
         start = datetime.now()
         result = function(*args, **kwargs)
         end = datetime.now()
-        print('Function', function.__name__, 'took', end - start, file=stderr)
+        print('Function', function.__name__, 'took', end - start, file=stderr,
+              flush=True)
         return result
 
     return wrapper
