@@ -4,7 +4,7 @@ from contextlib import suppress
 from datetime import datetime
 from functools import wraps
 from sys import exit, stderr    # pylint: disable=W0622
-from typing import Any, Callable
+from typing import Any, Callable, IO
 
 
 __all__ = ['coerce', 'coroproperty', 'exiting', 'timeit', 'wants_instance']
@@ -88,20 +88,24 @@ def exiting(function: Callable) -> Callable:
     return wrapper
 
 
-def timeit(function: Callable) -> Callable:
+def timeit(file: IO = stderr) -> Callable:
     """Times the execution of the given function."""
 
-    @wraps(function)
-    def wrapper(*args, **kwargs):
-        """Wraps the original function."""
-        start = datetime.now()
-        result = function(*args, **kwargs)
-        end = datetime.now()
-        print('Function', function.__name__, 'took', end - start, file=stderr,
-              flush=True)
-        return result
+    def decorator(function: Callable) -> Callable:
+        """The actual decorator."""
+        @wraps(function)
+        def wrapper(*args, **kwargs):
+            """Wraps the original function."""
+            start = datetime.now()
+            result = function(*args, **kwargs)
+            end = datetime.now()
+            print('Function', function.__name__, 'took', end - start,
+                  file=file, flush=True)
+            return result
 
-    return wrapper
+        return wrapper
+
+    return decorator
 
 
 def wants_instance(function: Callable) -> bool:
