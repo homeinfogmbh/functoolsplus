@@ -10,13 +10,13 @@ from typing import Any, Callable, IO
 __all__ = ['coerce', 'coroproperty', 'exiting', 'timeit', 'wants_instance']
 
 
-def coerce(typ: type) -> Callable:
+def coerce(typ: type) -> Callable[..., Any]:
     """Converts the return value into the given type."""
 
-    def decorator(function: Callable) -> typ:
+    def decorator(function: Callable) -> Callable[..., typ]:
         """Decorates the given function."""
         @wraps(function)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args, **kwargs) -> typ:
             """Wraps the respective function."""
             return typ(function(*args, **kwargs))
 
