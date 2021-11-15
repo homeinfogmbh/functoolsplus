@@ -1,6 +1,6 @@
 """Even higher-order functions and operations on callable objects."""
 
-from datetime import datetime
+from time import perf_counter
 from functools import wraps
 from sys import exit, stderr    # pylint: disable=W0622
 from typing import Any, Callable, IO
@@ -45,9 +45,9 @@ def timeit(file: IO = stderr, flush: bool = False) -> Callable:
         @wraps(function)
         def wrapper(*args, **kwargs):
             """Wraps the original function."""
-            start = datetime.now()
+            start = perf_counter()
             result = function(*args, **kwargs)
-            end = datetime.now()
+            end = perf_counter()
             print('Function', function.__name__, 'took', end - start,
                   file=file, flush=flush)
             return result
