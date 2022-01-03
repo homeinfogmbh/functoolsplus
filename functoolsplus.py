@@ -6,7 +6,7 @@ from sys import exit, stderr    # pylint: disable=W0622
 from typing import Any, Callable, IO
 
 
-__all__ = ['coerce', 'exiting', 'wants_instance']
+__all__ = ['coerce', 'exiting', 'exitmethod', 'wants_instance']
 
 
 def coerce(typ: type) -> Callable[..., Any]:
@@ -35,6 +35,27 @@ def exiting(function: Callable) -> Callable:
         exit(result or 0)
 
     return wrapper
+
+
+def exitmethod(function: Callable[..., Any]) -> object:
+    """Returns a context manager, having
+    the respective function as exit method.
+    """
+
+    class _ContextManager:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, type_, value, traceback):
+            if function is None:
+                return None
+
+            if wants_instance(function):
+                return function(self, type_, value, traceback)
+
+            return function(type_, value, traceback)
+
+    return _ContextManager
 
 
 def timeit(file: IO = stderr, flush: bool = False) -> Callable:
