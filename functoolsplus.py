@@ -52,7 +52,7 @@ def exitmethod(function: Callable[..., Any]) -> object:
 
             return function(typ, value, traceback)
 
-    return _ContextManager
+    return _ContextManager()
 
 
 def timeit(file: IO = stderr, flush: bool = False) -> Callable:
