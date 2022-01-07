@@ -37,22 +37,22 @@ def exiting(function: Callable) -> Callable:
     return wrapper
 
 
-def exitmethod(function: Callable[..., Any]) -> object:
-    """Returns a context manager, having
-    the respective function as exit method.
+class exitmethod:   # pylint: disable=C0103
+    """Decorator class to creates a context manager,
+    having the passwd function as exit method.
     """
 
-    class _ContextManager:
-        def __enter__(self):
-            return self
+    def __init__(self, function: Callable[..., Any]):
+        self.function = function
 
-        def __exit__(self, typ, value, traceback):
-            if wants_instance(function):
-                return function(self, typ, value, traceback)
+    def __enter__(self):
+        return self
 
-            return function(typ, value, traceback)
+    def __exit__(self, typ, value, traceback):
+        if wants_instance(self.function):
+            return self.function(self, typ, value, traceback)
 
-    return _ContextManager()
+        return self.function(typ, value, traceback)
 
 
 def timeit(file: IO = stderr, flush: bool = False) -> Callable:
