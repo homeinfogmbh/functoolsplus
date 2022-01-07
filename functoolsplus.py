@@ -46,14 +46,11 @@ def exitmethod(function: Callable[..., Any]) -> object:
         def __enter__(self):
             return self
 
-        def __exit__(self, type_, value, traceback):
-            if function is None:
-                return None
-
+        def __exit__(self, typ, value, traceback):
             if wants_instance(function):
-                return function(self, type_, value, traceback)
+                return function(self, typ, value, traceback)
 
-            return function(type_, value, traceback)
+            return function(typ, value, traceback)
 
     return _ContextManager
 
