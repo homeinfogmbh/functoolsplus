@@ -38,8 +38,8 @@ def exiting(function: Callable) -> Callable:
 
 
 class exitmethod:   # pylint: disable=C0103
-    """Decorator class to creates a context manager,
-    having the passwd function as exit method.
+    """Decorator class to create a context manager,
+    having the passed function as exit method.
     """
 
     def __init__(self, function: Callable[..., Any]):
