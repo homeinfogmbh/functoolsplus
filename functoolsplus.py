@@ -9,6 +9,24 @@ from typing import Any, Callable, IO
 __all__ = ['coerce', 'exiting', 'exitmethod', 'wants_instance']
 
 
+class exitmethod:   # pylint: disable=C0103
+    """Decorator class to create a context manager,
+    having the passed function as exit method.
+    """
+
+    def __init__(self, function: Callable[..., Any]):
+        self.function = function
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, typ, value, traceback):
+        if wants_instance(self.function):
+            return self.function(self, typ, value, traceback)
+
+        return self.function(typ, value, traceback)
+
+
 def coerce(typ: type) -> Callable[..., Any]:
     """Converts the return value into the given type."""
 
@@ -35,24 +53,6 @@ def exiting(function: Callable) -> Callable:
         exit(result or 0)
 
     return wrapper
-
-
-class exitmethod:   # pylint: disable=C0103
-    """Decorator class to create a context manager,
-    having the passed function as exit method.
-    """
-
-    def __init__(self, function: Callable[..., Any]):
-        self.function = function
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, typ, value, traceback):
-        if wants_instance(self.function):
-            return self.function(self, typ, value, traceback)
-
-        return self.function(typ, value, traceback)
 
 
 def timeit(file: IO = stderr, flush: bool = False) -> Callable:
