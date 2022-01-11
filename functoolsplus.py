@@ -1,10 +1,8 @@
 """More higher-order functions and operations on callable objects."""
 
-from dataclasses import dataclass
-from time import perf_counter
 from functools import wraps
-from sys import exit, stderr    # pylint: disable=W0622
-from typing import Any, Callable, IO, Optional, Union
+from sys import exit    # pylint: disable=W0622
+from typing import Any, Callable, Union
 
 
 __all__ = [
@@ -12,41 +10,11 @@ __all__ = [
     'exiting',
     'exitmethod',
     'instance_of',
-    'timeit',
     'wants_instance'
 ]
 
 
 Decorator = Callable[[Callable[..., Any]], Callable[..., Any]]
-
-
-@dataclass
-class PerfCounter:
-    """Performance counter."""
-
-    start: Optional[float] = None
-    end: Optional[float] = None
-    on_exit: Optional[Callable[..., Any]] = None
-
-    def __enter__(self):
-        self.start = perf_counter()
-        return self
-
-    def __exit__(self, typ, value, traceback):
-        self.end = perf_counter()
-
-        if self.on_exit is None:
-            return None
-
-        if len(self.on_exit.__code__.co_varnames) == 1:
-            return self.on_exit(self)
-
-        return self.on_exit()
-
-    @property
-    def duration(self) -> float:
-        """Return the duration."""
-        return self.end - self.start
 
 
 class exitmethod:   # pylint: disable=C0103
@@ -99,33 +67,6 @@ def instance_of(cls: Union[type, tuple[type]]) -> Callable[[Any], bool]:
     """Returns a callback function to check the instance of an object."""
 
     return lambda obj: isinstance(obj, cls)
-
-
-def timeit(file: IO = stderr, flush: bool = False) -> Decorator:
-    """Times the execution of the given function."""
-
-    def print_duration(
-            function: Callable[..., Any]
-    ) -> Callable[[PerfCounter], None]:
-        """Prints a perf counter."""
-
-        def inner(ctr: PerfCounter) -> None:
-            print('Function', function.__name__, 'took', ctr.duration,
-                  file=file, flush=flush)
-
-        return inner
-
-    def decorator(function: Callable[..., Any]) -> Callable[..., Any]:
-        """The actual decorator."""
-        @wraps(function)
-        def wrapper(*args, **kwargs):
-            """Wraps the original function."""
-            with PerfCounter(on_exit=print_duration(function)):
-                return function(*args, **kwargs)
-
-        return wrapper
-
-    return decorator
 
 
 def wants_instance(function: Callable[..., Any]) -> bool:
