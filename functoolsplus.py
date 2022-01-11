@@ -4,12 +4,7 @@ from functools import partial, wraps
 from typing import Any, Callable, Union
 
 
-__all__ = [
-    'coerce',
-    'exit_function',
-    'exit_method',
-    'instance_of'
-]
+__all__ = ['coerce', 'exit_function', 'exit_method', 'instance_of']
 
 
 class exit_function:    # pylint: disable=C0103
