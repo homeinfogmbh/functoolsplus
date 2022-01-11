@@ -12,9 +12,6 @@ __all__ = [
 ]
 
 
-Decorator = Callable[[Callable[..., Any]], Callable[..., Any]]
-
-
 class exit_function:    # pylint: disable=C0103
     """Decorator class to create a context manager,
     having the passed function as exit function.
@@ -37,7 +34,7 @@ class exit_function:    # pylint: disable=C0103
 exit_method = partial(exit_function, method=True)
 
 
-def coerce(typ: type) -> Decorator:
+def coerce(typ: type) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """Converts the return value into the given type."""
 
     def decorator(function: Callable[..., Any]) -> Callable[..., typ]:
