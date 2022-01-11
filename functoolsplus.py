@@ -70,7 +70,7 @@ class exitmethod:   # pylint: disable=C0103
 def coerce(typ: type) -> Callable[..., Any]:
     """Converts the return value into the given type."""
 
-    def decorator(function: Callable) -> Callable[..., typ]:
+    def decorator(function: Callable[..., Any]) -> Callable[..., typ]:
         """Decorates the given function."""
         @wraps(function)
         def wrapper(*args, **kwargs) -> typ:
