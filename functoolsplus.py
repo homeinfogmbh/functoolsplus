@@ -1,4 +1,4 @@
-"""Even higher-order functions and operations on callable objects."""
+"""More higher-order functions and operations on callable objects."""
 
 from dataclasses import dataclass
 from time import perf_counter
