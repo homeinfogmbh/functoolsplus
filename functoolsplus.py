@@ -3,10 +3,17 @@
 from time import perf_counter
 from functools import wraps
 from sys import exit, stderr    # pylint: disable=W0622
-from typing import Any, Callable, IO
+from typing import Any, Callable, IO, Union
 
 
-__all__ = ['coerce', 'exiting', 'exitmethod', 'wants_instance']
+__all__ = [
+    'coerce',
+    'exiting',
+    'exitmethod',
+    'instance_of',
+    'timeit',
+    'wants_instance'
+]
 
 
 class exitmethod:   # pylint: disable=C0103
@@ -53,6 +60,12 @@ def exiting(function: Callable) -> Callable:
         exit(result or 0)
 
     return wrapper
+
+
+def instance_of(cls: Union[type, tuple[type]]) -> Callable[[Any], bool]:
+    """Returns a callback function to check the instance of an object."""
+
+    return lambda obj: isinstance(obj, cls)
 
 
 def timeit(file: IO = stderr, flush: bool = False) -> Callable:
