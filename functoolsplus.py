@@ -1,13 +1,11 @@
 """More higher-order functions and operations on callable objects."""
 
 from functools import wraps
-from sys import exit    # pylint: disable=W0622
 from typing import Any, Callable, Union
 
 
 __all__ = [
     'coerce',
-    'exiting',
     'exitmethod',
     'instance_of',
     'wants_instance'
@@ -49,18 +47,6 @@ def coerce(typ: type) -> Decorator:
         return wrapper
 
     return decorator
-
-
-def exiting(function: Callable[..., Any]) -> Callable[..., Any]:
-    """Makes a function exit the program with its return code."""
-
-    @wraps(function)
-    def wrapper(*args, **kwargs) -> Any:
-        """Wraps the respective function."""
-        result = function(*args, **kwargs)
-        exit(result or 0)
-
-    return wrapper
 
 
 def instance_of(cls: Union[type, tuple[type]]) -> Callable[[Any], bool]:
