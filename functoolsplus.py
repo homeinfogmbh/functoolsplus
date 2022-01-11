@@ -8,8 +8,7 @@ __all__ = [
     'coerce',
     'exit_function',
     'exit_method',
-    'instance_of',
-    'wants_instance'
+    'instance_of'
 ]
 
 
@@ -58,12 +57,3 @@ def instance_of(cls: Union[type, tuple[type]]) -> Callable[[Any], bool]:
     """Returns a callback function to check the instance of an object."""
 
     return lambda obj: isinstance(obj, cls)
-
-
-def wants_instance(function: Callable[..., Any]) -> bool:
-    """Determines whether the respective function is considered a method."""
-
-    try:
-        return function.__code__.co_varnames[0] == 'self'
-    except IndexError:
-        return False
