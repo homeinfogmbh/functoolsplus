@@ -67,7 +67,7 @@ class exitmethod:   # pylint: disable=C0103
         return self.function(typ, value, traceback)
 
 
-def coerce(typ: type) -> Callable[..., Any]:
+def coerce(typ: type) -> Decorator:
     """Converts the return value into the given type."""
 
     def decorator(function: Callable[..., Any]) -> Callable[..., typ]:
