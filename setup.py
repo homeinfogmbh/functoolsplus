@@ -2,7 +2,7 @@
 
 from setuptools import setup
 
-DESCRIPTION = 'Even higher-order functions and operations on callable objects.'
+DESCRIPTION = 'More higher-order functions and operations on callable objects.'
 
 setup(
     name='functoolsplus',

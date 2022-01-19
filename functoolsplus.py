@@ -7,26 +7,37 @@ from typing import Any, Callable, Union
 __all__ = ['coerce', 'exit_function', 'exit_method', 'instance_of']
 
 
-class exit_function:    # pylint: disable=C0103
+class exit_function:
     """Decorator class to create a context manager,
     having the passed function as exit function.
     """
 
-    def __init__(self, function: Callable[..., Any], *, method: bool = False):
+    __slots__ = ('function',)
+
+    def __init__(self, function: Callable[..., Any]):
         self.function = function
-        self.method = method
 
     def __enter__(self):
         return self
 
     def __exit__(self, typ, value, traceback):
-        if self.method:
-            return self.function(self, typ, value, traceback)
-
         return self.function(typ, value, traceback)
 
 
-exit_method = partial(exit_function, method=True)
+def exit_method(method: Callable[..., Any]):
+    """Decorator class to create a context manager,
+    having the passed function as exit method.
+    """
+
+    class ContextManager:
+        __slots__ = ()
+
+        def __enter__(self):
+            return self
+
+        __exit__ = method
+
+    return ContextManager()
 
 
 def coerce(typ: type) -> Callable[[Callable[..., Any]], Callable[..., Any]]:

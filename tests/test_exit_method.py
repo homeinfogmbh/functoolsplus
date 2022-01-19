@@ -2,13 +2,11 @@
 
 from unittest import TestCase
 
-from functoolsplus import exit_function, exit_method
+from functoolsplus import exit_method
 
 
 @exit_method
 def test_method(self, typ, value, traceback):
-    assert isinstance(self, exit_function)
-
     if typ is None and value is None:
         return True
 
@@ -18,9 +16,6 @@ def test_method(self, typ, value, traceback):
 
 class TestExitMethod(TestCase):
     """Test exit_method()."""
-
-    def test_type(self):
-        self.assertIsInstance(test_method, exit_function)
 
     def test_is_context_manager(self):
         self.assertTrue(hasattr(test_method, '__enter__'))
