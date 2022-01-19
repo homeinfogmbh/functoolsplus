@@ -4,7 +4,7 @@ from functools import wraps
 from typing import Any, Callable, Union
 
 
-__all__ = ['coerce', 'exit_function', 'exit_method', 'instance_of']
+__all__ = ['coerce', 'exit_function', 'instance_of']
 
 
 class exit_function:
@@ -22,22 +22,6 @@ class exit_function:
 
     def __exit__(self, typ, value, traceback):
         return self.function(typ, value, traceback)
-
-
-def exit_method(method: Callable[..., Any]):
-    """Decorator class to create a context manager,
-    having the passed function as exit method.
-    """
-
-    class ContextManager:
-        __slots__ = ()
-
-        def __enter__(self):
-            return self
-
-        __exit__ = method
-
-    return ContextManager()
 
 
 def coerce(typ: type) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
