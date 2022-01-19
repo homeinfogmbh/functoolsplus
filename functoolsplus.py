@@ -1,6 +1,6 @@
 """More higher-order functions and operations on callable objects."""
 
-from functools import partial, wraps
+from functools import wraps
 from typing import Any, Callable, Union
 
 
