@@ -24,7 +24,6 @@ class TestExitMethod(TestCase):
     def test_context(self):
         with test_method as manager:
             self.assertIsInstance(manager, test_method)
-            self.assertTrue(hasattr(manager, '__exit__'))
 
     def test_exception_handling(self):
         with test_method:
