@@ -1,4 +1,4 @@
-"""Test the exit_function() decorator."""
+"""Test exit_function() decorator."""
 
 from unittest import TestCase
 
