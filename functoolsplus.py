@@ -4,7 +4,7 @@ from functools import wraps
 from typing import Any, Callable, Union
 
 
-__all__ = ['coerce', 'exit_function', 'instance_of']
+__all__ = ["coerce", "exit_function", "instance_of"]
 
 
 class exit_function:
@@ -12,7 +12,7 @@ class exit_function:
     having the passed function as exit function.
     """
 
-    __slots__ = ('function',)
+    __slots__ = ("function",)
 
     def __init__(self, function: Callable[..., Any]):
         self.function = function
@@ -29,12 +29,13 @@ def coerce(typ: type) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
 
     def decorator(function: Callable[..., Any]) -> Callable[..., typ]:
         """Decorates the given function."""
+
         @wraps(function)
         def wrapper(*args, **kwargs) -> typ:
             """Wraps the respective function."""
             return typ(function(*args, **kwargs))
 
-        wrapper.__annotations__['return'] = typ
+        wrapper.__annotations__["return"] = typ
         return wrapper
 
     return decorator

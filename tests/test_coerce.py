@@ -17,15 +17,14 @@ def test_coerce_set(*args, **kwargs) -> Iterator[Any]:
 
 
 class TestCoerce(TestCase):
-
     def test_type_hint(self):
-        self.assertEqual(test_coerce_set.__annotations__['return'], set)
+        self.assertEqual(test_coerce_set.__annotations__["return"], set)
 
     def test_return_type(self):
         self.assertIsInstance(test_coerce_set(), set)
 
     def test_return_value(self):
         self.assertSetEqual(
-            test_coerce_set('some', 42, 'args', keyword=True, other=None),
-            {'some', 42, 'args', 'keyword', True, 'other', None}
+            test_coerce_set("some", 42, "args", keyword=True, other=None),
+            {"some", 42, "args", "keyword", True, "other", None},
         )
